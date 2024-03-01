@@ -21,4 +21,5 @@ dependencies:
   - setuptools_scm
   - statsmodels
   - toml
+  - requests
   - pip: [-e ., kaleido, pdbp]

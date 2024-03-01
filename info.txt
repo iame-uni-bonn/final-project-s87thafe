@@ -1,0 +1,5 @@
+    Types of betting markets:
+    H2H (Head to Head / Moneyline): Betting on which team or player will win the event. It's the simplest form of betting - you pick the winner.
+    Spreads (Points Handicaps): Betting on the margin of victory. The favorite is given a handicap to level the playing field with the underdog. You bet on whether the favorite's score minus the spread is greater than the underdog's score.
+    Totals (Over/Under): Betting on the combined score of both teams or players. You wager whether the total score will be over or under a specified amount.
+    Outrights (Futures): Betting on the outcome of a league or tournament far in advance. You're betting on who will ultimately win a competition, not just a single match.
