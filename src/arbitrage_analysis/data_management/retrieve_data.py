@@ -59,7 +59,6 @@ df_sports.to_csv("df_sports.csv", index=False)
 
 # Fetch odds data, print and save to CSV
 odds_data = get_odds_the_odds_api(sport, apiKey, regions, markets)
-print(odds_data)
 # Assuming you want to save `odds_data` to CSV, ensure it's in DataFrame form
 df_odds = pd.json_normalize(odds_data)
 df_odds.to_csv("df_odds.csv", index=False)
