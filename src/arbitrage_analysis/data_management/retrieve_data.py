@@ -1,9 +1,11 @@
 import requests
 import pandas as pd
-from arbitrage_analysis.config import THE_ODDS_API_API_KEY
+import os
 
-apiKey = THE_ODDS_API_API_KEY
-# Example usage
+# Access environment variables
+apiKey = os.getenv('THE_ODDS_API_API_KEY')
+
+# Define parameters for the API request
 sport = "soccer_epl"
 regions = "eu" 
 markets = "h2h"

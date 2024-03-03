@@ -12,6 +12,9 @@
 # bld
 bld/
 
+# api_keys
+.env
+
 # latex
 *.aux
 *.bbl

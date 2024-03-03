@@ -4,9 +4,23 @@ from pathlib import Path
 SRC = Path(__file__).parent.resolve()
 BLD = SRC.joinpath("..", "..", "bld").resolve()
 
+BLD_data = BLD / "data"
+BLD_figures = BLD / "figures"
+BLD_model = BLD  / "models"
+BLD_predictions = BLD / "predictions"
+BLD_tables = BLD / "tables"
+
 TEST_DIR = SRC.joinpath("..", "..", "tests").resolve()
 PAPER_DIR = SRC.joinpath("..", "..", "paper").resolve()
 
-THE_ODDS_API_API_KEY = "6c335dcec08f7534db180f97b29e4d92"
-
-__all__ = ["BLD", "SRC", "TEST_DIR", "GROUPS"]
+__all__ = [
+    "BLD",
+    "SRC",
+    "BLD_data",
+    "BLD_figures",
+    "BLD_models",
+    "BLD_predictions",
+    "BLD_tables",
+    "TEST_DIR",
+    "GROUPS",
+]
