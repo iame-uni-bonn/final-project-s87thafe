@@ -44,13 +44,13 @@ def create_odds_dataframe(bookmakers_json, home_team, away_team):
     return pd.DataFrame(bookmakers_odds)
 
 create_odds_dataframe_depends_on = {
-    "data": SRC / "data" / "df_odds.csv",
+    "data": SRC / "data" / "df_odds_the_odds_api.csv",
     "directory": BLD_data / ".dir_created"
 }
 
 def task_create_odds_dataframe(
         depends_on= create_odds_dataframe_depends_on,
-        produces=BLD_data / "df_all_games_odds.csv",
+        produces=BLD_data / "df_all_games_odds.pkl",
 ):
     # Load the dataset containing the odds data
     df_odds = pd.read_csv(depends_on["data"])
@@ -64,4 +64,4 @@ def task_create_odds_dataframe(
     # Concatenate all individual DataFrames into a single DataFrame
     df_all_games_odds = pd.concat(all_games_odds, ignore_index=True)
     # Display the combined DataFrame
-    df_all_games_odds.to_csv(produces, index=False)
+    df_all_games_odds.to_pickle(produces, index=False)

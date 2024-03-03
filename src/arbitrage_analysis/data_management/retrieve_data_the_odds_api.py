@@ -1,16 +1,16 @@
 import requests
 import pandas as pd
 import os
+from arbitrage_analysis.config import SRC
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Access environment variables
-apiKey = os.getenv('THE_ODDS_API_API_KEY')
+the_odds_api_key = os.getenv('THEODDSAPI_API_KEY')
 
-# Define parameters for the API request
-sport = "soccer_epl"
-regions = "eu" 
-markets = "h2h"
-
-def get_sports_the_odds_api(apiKey):
+def get_sports_the_odds_api(api_key):
     """
     Fetches the list of sports from The Odds API.
     
@@ -21,14 +21,14 @@ def get_sports_the_odds_api(apiKey):
         dict: A JSON response containing the list of sports if the request is successful.
         str: An error message indicating the HTTP status code if the request fails.
     """
-    url = f"https://api.the-odds-api.com/v4/sports/?apiKey={apiKey}"
+    url = f"https://api.the-odds-api.com/v4/sports/?apiKey={api_key}"
     response = requests.get(url)
     if response.status_code == 200:
         return response.json()  # Returns the JSON response from the API
     else:
         return f"Error fetching data: {response.status_code}"
 
-def get_odds_the_odds_api(sport, apiKey, regions, markets):
+def get_odds_the_odds_api(sport, api_key, regions, markets):
     """
     Fetches odds for a specific sport from The Odds API based on the specified regions and markets.
     
@@ -44,7 +44,7 @@ def get_odds_the_odds_api(sport, apiKey, regions, markets):
     """
     url = f"https://api.the-odds-api.com/v4/sports/{sport}/odds/"
     params = {
-        "apiKey": apiKey,
+        "apiKey": api_key,
         "regions": regions,
         "markets": markets,
     }
@@ -55,12 +55,16 @@ def get_odds_the_odds_api(sport, apiKey, regions, markets):
         return f"Error fetching data: {response.status_code}"
 
 # Fetch and save sports to CSV
-sports = get_sports_the_odds_api(apiKey)
+sports = get_sports_the_odds_api(the_odds_api_key)
 df_sports = pd.json_normalize(sports)
-df_sports.to_csv("df_sports.csv", index=False)
+df_sports.to_csv("df_sports_the_odds_api.csv", index=False)
+
+# Define parameters for the API request
+sport = "soccer_italy_serie_a"
+regions = "eu" 
+markets = "h2h"
 
 # Fetch odds data, print and save to CSV
-odds_data = get_odds_the_odds_api(sport, apiKey, regions, markets)
-# Assuming you want to save `odds_data` to CSV, ensure it's in DataFrame form
+odds_data = get_odds_the_odds_api(sport, the_odds_api_key, regions, markets)
 df_odds = pd.json_normalize(odds_data)
-df_odds.to_csv("df_odds.csv", index=False)
+df_odds.to_csv(SRC / "data" / "df_odds_the_odds_api.csv", index=False)
