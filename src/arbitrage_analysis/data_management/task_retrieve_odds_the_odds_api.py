@@ -3,7 +3,7 @@ import json
 from arbitrage_analysis.config import BLD_data, SRC
 
 
-def create_odds_dataframe(bookmakers_json, home_team, away_team):
+def extract_odds_the_odds_api(bookmakers_json, home_team, away_team):
     """
     Creates a DataFrame containing the odds offered by bookmakers for a given game between a home team and an away team.
     
@@ -48,7 +48,7 @@ create_odds_dataframe_depends_on = {
     "directory": BLD_data / ".dir_created"
 }
 
-def task_create_odds_dataframe(
+def task_extract_odds_the_odds_api(
         depends_on= create_odds_dataframe_depends_on,
         produces=BLD_data / "df_all_games_odds.pkl",
 ):
@@ -56,9 +56,10 @@ def task_create_odds_dataframe(
     df_odds = pd.read_csv(depends_on["data"])
     # Initialize an empty list to store each game's DataFrame
     all_games_odds = []
+
     # Iterate over each game in the dataset
     for index, row in df_odds.iterrows():
-        game_odds_df = create_odds_dataframe(row['bookmakers'], row['home_team'], row['away_team'])
+        game_odds_df = extract_odds_the_odds_api(row['bookmakers'], row['home_team'], row['away_team'])
         all_games_odds.append(game_odds_df)
 
     # Concatenate all individual DataFrames into a single DataFrame

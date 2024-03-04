@@ -57,7 +57,7 @@ def get_odds_the_odds_api(sport, api_key, regions, markets):
 # Fetch and save sports to CSV
 sports = get_sports_the_odds_api(the_odds_api_key)
 df_sports = pd.json_normalize(sports)
-df_sports.to_csv("df_sports_the_odds_api.csv", index=False)
+df_sports.to_csv(SRC / "data" / "df_sports_the_odds_api.csv", index=False)
 
 # Define parameters for the API request
 sport = "soccer_italy_serie_a"
