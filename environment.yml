@@ -22,4 +22,4 @@ dependencies:
   - statsmodels
   - toml
   - requests
-  - pip: [-e ., kaleido, python-dotenv, pdbp, pyreadline]
+  - pip: [-e ., kaleido, python-dotenv, pdbp, pyreadline3]

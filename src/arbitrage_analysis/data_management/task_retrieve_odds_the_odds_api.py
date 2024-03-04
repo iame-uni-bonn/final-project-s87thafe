@@ -50,8 +50,8 @@ create_odds_dataframe_depends_on = {
 
 def task_extract_odds_the_odds_api(
         depends_on= create_odds_dataframe_depends_on,
-        produces=BLD_data / "df_all_games_odds.pkl",
-):
+        produces=BLD_data / "all_odds_the_odds_api.pkl"
+        ):
     # Load the dataset containing the odds data
     df_odds = pd.read_csv(depends_on["data"])
     # Initialize an empty list to store each game's DataFrame
@@ -65,4 +65,19 @@ def task_extract_odds_the_odds_api(
     # Concatenate all individual DataFrames into a single DataFrame
     df_all_games_odds = pd.concat(all_games_odds, ignore_index=True)
     # Display the combined DataFrame
-    df_all_games_odds.to_pickle(produces, index=False)
+    df_all_games_odds.to_pickle(produces)
+
+############################################################################################
+# hard coded version
+# Load the dataset containing the odds data
+df_odds = pd.read_csv(SRC / "data" / "df_odds_the_odds_api.csv")
+# Initialize an empty list to store each game's DataFrame
+all_games_odds = []
+# Iterate over each game in the dataset
+for index, row in df_odds.iterrows():
+    game_odds_df = extract_odds_the_odds_api(row['bookmakers'], row['home_team'], row['away_team'])
+    all_games_odds.append(game_odds_df)
+# Concatenate all individual DataFrames into a single DataFrame
+df_all_games_odds = pd.concat(all_games_odds, ignore_index=True)
+# Display the combined DataFrame
+df_all_games_odds.to_pickle(BLD_data / "all_odds_the_odds_api.pkl")
