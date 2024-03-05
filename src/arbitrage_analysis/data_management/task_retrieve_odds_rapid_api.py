@@ -57,13 +57,3 @@ def task_extract_odds_rapid_api(
     
     # Save the transformed DataFrame to a pickle file
     all_odds_df.to_pickle(produces)
-
-############################################################################################
-# hard coded version
-# Extract the path to the source data file from task dependencies
-data_file = SRC / "data" / "df_odds_rapid_api.csv"
-# Transform the source data into a cleaned DataFrame
-all_odds_df = extract_odds_rapid_api(data_file)
-
-# Save the transformed DataFrame to a pickle file
-all_odds_df.to_pickle(BLD_data / "all_odds_rapid_api.pkl")

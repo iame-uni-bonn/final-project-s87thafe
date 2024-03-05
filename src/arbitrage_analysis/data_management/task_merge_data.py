@@ -51,6 +51,6 @@ standardize_and_merge_depends_on = {
 
 def task_standardize_and_merge(
         depends_on= standardize_and_merge_depends_on,
-        produces= BLD_data / "all_odds_merged.csv"
+        produces= BLD_data / "all_odds_merged.pkl"
         ):
     standardize_team_names_and_merge(depends_on["df_the_odds_api_path"], depends_on["df_rapid_api_path"], produces)

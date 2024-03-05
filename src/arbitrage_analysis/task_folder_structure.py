@@ -10,8 +10,8 @@ files_produces = {
 }
 
 def task_create_directories(
-    produces=files_produces,
-):
+    produces=files_produces
+    ):
     # Define the subdirectories to create within BLD
     directories = {
     "data": BLD / "data",
@@ -28,19 +28,3 @@ def task_create_directories(
         # Create a marker file in each subdirectory
         marker_file = file
         marker_file.touch()
-
-# Define the subdirectories to create within BLD
-directories = {
-"data": BLD / "data",
-"figures": BLD / "figures",
-"models": BLD / "models",
-"predictions": BLD / "predictions",
-"tables": BLD / "tables",
-}
-for directory in directories.values():
-    # Create the subdirectory if it doesn't exist
-    directory.mkdir(parents=True, exist_ok=True)
-for file in produces.values():
-    # Create a marker file in each subdirectory
-    marker_file = file
-    marker_file.touch()

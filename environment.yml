@@ -5,7 +5,7 @@ dependencies:
   - conda-lock
   - ipykernel
   - jupyterlab
-  - pandas
+  - pandas=2.2.1
   - pip >=21.1
   - plotly>=5.13.0
   - pre-commit
@@ -22,4 +22,4 @@ dependencies:
   - statsmodels
   - toml
   - requests
-  - pip: [-e ., kaleido, python-dotenv, pdbp, pyreadline3]
+  - pip: [-e ., kaleido, python-dotenv, pdbp]
