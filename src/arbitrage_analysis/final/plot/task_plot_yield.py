@@ -4,7 +4,7 @@ from datetime import timedelta
 from arbitrage_analysis.config import BLD_data, BLD_figures
 
 
-def plot_investment_growth(filtered_arbitrage_opp_path, investment_growth_path):
+def plot_investment_growth(filtered_arbitrage_opp_path, investment_growth_path, btc_ticker_path):
     """
     Generates a plot of investment growth based on filtered arbitrage betting opportunities.
 
@@ -19,6 +19,7 @@ def plot_investment_growth(filtered_arbitrage_opp_path, investment_growth_path):
     """
     # Load the filtered dataset
     df_filtered = pd.read_pickle(filtered_arbitrage_opp_path)
+    ticker_averages = pd.read_pickle(btc_ticker_path)
     
     # Sort the DataFrame by commence_time to ensure chronological order
     df_filtered = df_filtered.sort_values(by='commence_time')
@@ -58,16 +59,22 @@ def plot_investment_growth(filtered_arbitrage_opp_path, investment_growth_path):
     final_investment = df_filtered.iloc[-1]['investment_growth']
     fig.add_trace(go.Scatter(x=[df_filtered.iloc[-1]['commence_time'], end_time], y=[final_investment, final_investment], mode='lines', line=dict(color='blue'), showlegend=False))
 
+    # Plotting Ticker yield averages
+    btc_dates = pd.date_range(start=df_filtered['commence_time'].min(), periods=len(ticker_averages))
+    fig.add_trace(go.Scatter(x=btc_dates, y=ticker_averages['investment_growth_ticker'], mode='lines+markers', name='BTC Yield Average', line=dict(color='red')))
+
     # Update layout
     fig.update_layout(title='Investment Growth Over Time', xaxis_title='Date', yaxis_title='Investment Value ($)', xaxis=dict(type='date', showline=True, showticklabels=True, ticks='outside', linecolor='rgb(204, 204, 204)', linewidth=2, tickfont=dict(family='Arial', size=12, color='rgb(82, 82, 82)')), yaxis=dict(showline=True, showticklabels=True, ticks='outside', linecolor='rgb(204, 204, 204)', linewidth=2, tickfont=dict(family='Arial', size=12, color='rgb(82, 82, 82)')))
 
     fig.write_image(investment_growth_path)
 
+depends_on_plot_investment = {
+    "filtered_arbitrage_opp_path": BLD_data / "filtered_arbitrage_opportunities.pkl",
+    "ticker_path": BLD_data / "benchmark_growth_path_BTC.pkl"
+}
 
 def task_plot_investment_growth(
-    depends_on = BLD_data / "filtered_arbitrage_opportunities.pkl",
+    depends_on = depends_on_plot_investment,
     produces = BLD_figures / "investment_growth.png"
 ):
-    plot_investment_growth(depends_on, produces)
-
-
+    plot_investment_growth(depends_on["filtered_arbitrage_opp_path"], produces, depends_on["ticker_path"])
