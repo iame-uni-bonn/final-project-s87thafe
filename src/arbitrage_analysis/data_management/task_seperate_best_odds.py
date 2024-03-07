@@ -24,11 +24,13 @@ def find_best_odds(df_path) -> pd.DataFrame:
         best_home = group.loc[group['home_win_odds'].idxmax()]
         best_draw = group.loc[group['draw_odds'].idxmax()]
         best_away = group.loc[group['away_win_odds'].idxmax()]
+        commence_time = group['commence_time'].iloc[0]
         
         # Append information for each match
         data_to_append.append({
             'home_team': home_team,
             'away_team': away_team,
+            'commence_time': commence_time,
             'best_odds_home': best_home['home_win_odds'],
             'best_odds_draw': best_draw['draw_odds'],
             'best_odds_away': best_away['away_win_odds'],

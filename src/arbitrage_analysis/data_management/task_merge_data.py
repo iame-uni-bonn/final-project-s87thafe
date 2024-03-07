@@ -6,8 +6,8 @@ def standardize_team_names_and_merge(df_the_odds_api_path, df_rapid_api_path, ou
     Standardizes team names in two DataFrames and merges them into a single DataFrame.
 
     Parameters:
-    - df1_path (Path): Path to the "The Odds API" DataFrame pickle file.
-    - df2_path (Path): Path to the "Rapid API" DataFrame pickle file.
+    - df_the_odds_api_path (Path): Path to the "The Odds API" DataFrame pickle file.
+    - df_rapid_api_path (Path): Path to the "Rapid API" DataFrame pickle file.
     - output_path (Path): Path where the merged DataFrame will be saved as a .pkl.
 
     The function reads two DataFrames from pickle files, standardizes team names using
@@ -28,20 +28,30 @@ def standardize_team_names_and_merge(df_the_odds_api_path, df_rapid_api_path, ou
         'Atalanta Bergamasca ': 'Atalanta BC', 'As Roma': 'AS Roma'
     }
 
-    # Apply the mapping
+    # Standardize team names in df_rapid_api using the mapping
     df_rapid_api['home_team'] = df_rapid_api['home_team'].map(team_name_mapping).fillna(df_rapid_api['home_team'])
     df_rapid_api['away_team'] = df_rapid_api['away_team'].map(team_name_mapping).fillna(df_rapid_api['away_team'])
 
     # Rename columns in df_rapid_api for consistency
-    df_rapid_api.rename(columns={'away': 'away_win_odds', 'home': 'home_win_odds', 'bookie': 'bookmaker'}, inplace=True)
+    df_rapid_api.rename(columns={'away': 'away_win_odds', 'home': 'home_win_odds', 'draw': 'draw_odds', 'bookie': 'bookmaker'}, inplace=True)
 
     # Merge the DataFrames
     df_merged = pd.concat([df_the_odds_api, df_rapid_api], ignore_index=True)
 
-    # Sort by home_team and away_team
-    df_merged_sorted = df_merged.sort_values(by=['home_team', 'away_team'])
+    # Extract unique pairs of home_team, away_team, and their commence_time from df_the_odds_api
+    commence_time_mapping = df_the_odds_api[['home_team', 'away_team', 'commence_time']].drop_duplicates()
 
-    # Save the merged DataFrame
+    # Left merge to fill in commence_time for matches in df_rapid_api based on matches in df_the_odds_api
+    df_merged_updated = pd.merge(df_merged, commence_time_mapping, on=['home_team', 'away_team'], how='left', suffixes=('', '_from_api'))
+
+    # Resolve any commence_time conflicts (if both columns have values, prefer the original commence_time)
+    df_merged_updated['commence_time'] = df_merged_updated['commence_time'].fillna(df_merged_updated['commence_time_from_api'])
+
+    # Drop the temporary column used for merging
+    df_merged_updated.drop(columns=['commence_time_from_api'], inplace=True)
+
+    # Sort and save the merged DataFrame
+    df_merged_sorted = df_merged_updated.sort_values(by=['home_team', 'away_team'])
     df_merged_sorted.to_pickle(output_path)
 
 standardize_and_merge_depends_on = {
