@@ -7,7 +7,7 @@ from arbitrage_analysis.data_management.task_retrieve_data_yfinance import calcu
 def mock_yfinance_data():
     # Create a sample DataFrame that mimics yfinance data structure
     data = pd.DataFrame({
-        'Close': [100, 105, 102, 110, 108, 112, 115, 113, 118, 120, 122, 125, 127, 130, 132, 135]  # Sample data
+        'Close': [100, 105, 102, 110, 108, 112, 115, 113, 118, 120, 122, 125, 127, 130, 132, 135]
     })
     data['Close'] = data['Close'].astype(float)
     return data

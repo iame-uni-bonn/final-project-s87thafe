@@ -3,7 +3,7 @@ import pandas as pd
 from arbitrage_analysis.data_management.task_retrieve_odds_the_odds_api import extract_odds_the_odds_api
 
 def test_extract_odds_the_odds_api():
-    # Sample JSON data (simplified for demonstration)
+    # Sample JSON data
     bookmakers_json = """
     [
         {
