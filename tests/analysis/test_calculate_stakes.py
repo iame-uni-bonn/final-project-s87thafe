@@ -20,7 +20,7 @@ def test_calculate_stakes():
     # Calling the calculate_stakes function
     calculated_row = calculate_stakes(sample_row, total_investment)
 
-    # Asserting that the calculated stakes match the expected stakes
+    # Assert
     assert calculated_row['stake_home'] == expected_stake_home, f"Expected stake_home to be {expected_stake_home}, got {calculated_row['stake_home']}"
     assert calculated_row['stake_draw'] == expected_stake_draw, f"Expected stake_draw to be {expected_stake_draw}, got {calculated_row['stake_draw']}"
     assert calculated_row['stake_away'] == expected_stake_away, f"Expected stake_away to be {expected_stake_away}, got {calculated_row['stake_away']}"
