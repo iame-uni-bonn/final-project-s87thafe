@@ -1,6 +1,7 @@
 import pandas as pd
 import pytest
 import os
+import numpy as np
 from arbitrage_analysis.analysis.task_calculate_arbitrage import identify_arbitrage_opportunities
 
 # Sample data
@@ -29,3 +30,5 @@ def test_identify_arbitrage_opportunities(setup_data):
     # Assert
     assert os.path.exists(output_path), "Output file was not created."
     assert not result_df.empty, "No arbitrage opportunities were identified."
+    np.testing.assert_allclose(result_df['payout_home'].values, result_df['payout_draw'].values, rtol=1e-5, atol=0, err_msg="Payouts for home and draw should be almost equal.")
+    np.testing.assert_allclose(result_df['payout_home'].values, result_df['payout_away'].values, rtol=1e-5, atol=0, err_msg="Payouts for home and away should be almost equal.")
