@@ -64,16 +64,17 @@
 \author{Torben Haferkamp}
 
 \date{
-    {\bf Preliminary -- please do not quote}
-    \\[1ex]
     \today
+    \\[1ex]
+    \textit{Acknowledgements:} Template provided by \citet{GaudeckerEconProjectTemplates}
 }
 
 \maketitle
 
-
 \begin{abstract}
-    Some abstract here.
+    Arbitrage opportunities in sports betting arise from discrepancies in bookmaker odds, offering the promise of risk-free profits. This study investigates these opportunities within the Italian Serie A football matches using data collected via two distinct APIs, focusing on a period between March 4th to 18th, 2024. This paper presents a methodology for the identification and calculation of arbitrage situations using implied probabilities and calculate the potential profit margins through a kernel density estimation of the odds distribution. The paper aims to reveal the temporal arbitrage opportunities and shortly discuss their implications in the wider context of sports betting markets.
+    \\[1ex]
+    \textit{Disclaimer:} This paper exemplifies the practical application of Effective Programming Practice module concepts, without endorsing sports betting.
 \end{abstract}
 
 \clearpage
@@ -82,57 +83,128 @@
 \section{Introduction} % (fold)
 \label{sec:introduction}
 
-If you are using this template, please cite this item from the references:
-\citet{GaudeckerEconProjectTemplates}.
 
-The data set for the example project is taken from
-\url{https://www.stem.org.uk/resources/elibrary/resource/28452/large-datasets-stats4schools}.
-It contains data on smoking habits in the UK, with 1691 observations and 12 variables.
-We consider only 4 of the 12 features for the prediction of the variable
-\texttt{smoking}: \texttt{marital\_status}, \texttt{highest\_qualification},
-\texttt{gender} and \texttt{age}. We model the dependence using a Logistic model. All
-numerical features are included linearly, while categorical features are expanded into
-dummy variables. Figures below illustrate the model predictions over the lifetime. You
-will find one figure and one estimation summary table for each installed programming
-language.
+Arbitrage betting, as a financial strategy, capitalizes on the discrepancies in odds across different bookmakers to secure a guaranteed profit. This paper explores the domain of arbitrage opportunities present in Italian Serie A football matches, employing a dataset compiled from two distinct APIs: The ODDs API and OddsAPI1 via RAPID API. The dataset encompasses a period from March 4th to March 18th, 2024, and includes 22 matches, providing a detailed analysis of 1,810 odds across three betting outcomes: victories for the home team, draws, and victories for the away team. The objective of this investigation is to assess the viability of arbitrage betting for the selected matches as of the data retrieval date, March 3rd, 2024.
 
+% \section introduction (end)
 
+\section{Calculating Arbitrage Opportunities} % (fold)
+\label{sec:calculating_arbitrage_opportunities}
+
+Arbitrage betting in sports entails exploiting the variation in odds offered by bookmakers to ensure a profit regardless of the game's outcome. This section outlines the methodology employed to identify and calculate arbitrage opportunities using Python, specifically through the analysis of football game odds in the Italian Serie A.
+
+\subsection{General Formula for Identifying Arbitrage}
+The identification of arbitrage opportunities hinges on the concept of implied probability, which inversely correlates with the offered odds. For each game, the implied probability for all possible outcomes (home win, draw, away win) is calculated as follows:
+
+\begin{equation}
+    \text{Implied Probability} = \frac{1}{\text{Odds}}
+\end{equation}
+
+Subsequently, the total implied probability (\(TIP\)) is computed by summing the implied probabilities of all betting outcomes for a game:
+
+\begin{equation}
+    TIP = \text{Implied Probability}_{\text{home}} + \text{Implied Probability}_{\text{draw}} + \text{Implied Probability}_{\text{away}}
+\end{equation}
+
+An arbitrage opportunity is identified when \(TIP < 1\), indicating that the combined market odds offer a guaranteed profit if bets are appropriately distributed among all outcomes.
+
+\subsection{Calculating Stakes} % (subsubsection)
+Once an arbitrage opportunity is identified, the next step involves calculating the stakes to be placed on each outcome to ensure a guaranteed profit. The stake for each outcome is determined using the total investment amount (\(I\)) and the implied probabilities, ensuring that the return is consistent regardless of the outcome. The stakes are calculated as follows:
+
+\begin{equation}
+    \text{Stake}_{\text{outcome}} = \frac{\frac{1}{\text{Odds}_{\text{outcome}}}}{TIP} \times I
+\end{equation}
+
+This formula ensures that the investment is proportionally distributed according to the odds and thus eliminates the risk involved.
+
+To reference the appendix containing the table of data in your subsection on "Outcome and Profit Calculation", you should first ensure that your appendix and the table within it have been properly labeled. Assuming your appendix is structured as previously discussed and your table has a label (e.g., \label{tab:python-summary}), you can reference it directly in your text.
+
+Here's how you could integrate a reference to your appendix within the "Outcome and Profit Calculation" subsection:
+
+latex
+
+\subsection{Outcome and Profit Calculation}
+Post allocation of stakes, the expected payout for each possible outcome is calculated to evaluate the profitability of identified arbitrage opportunities. By applying this methodology to our dataset, focused on Italian Serie A football matches, we uncover arbitrage opportunities within the scope of the analysed bookmakers. Detailed results of the stakes and profits for each identified arbitrage opportunity are presented in Appendix A, Table~\ref{tab:summary}.
 
 \begin{figure}[H]
 
     \centering
-    \includegraphics[width=0.85\textwidth]{../python/figures/smoking_by_marital_status}
-
-    \caption{\emph{Python:} Model predictions of the smoking probability over the
-        lifetime. Each colored line represents a case where marital status is fixed to one
-        of the values present in the data set.}
+    \includegraphics[width=0.85\textwidth]{../bld/figures/arbitrage_opportunities}
+    \caption{Payouts by invested stakes, only for matches with an identified arbitrage opportunity.}
     \label{fig:python-predictions}
 
 \end{figure}
+% section calculating_arbitrage_opportunities (end)
 
+\section{Estimation of Odds Distribution}
+\label{subsec:estimation_of_odds_distribution}
 
-\begin{table}[!h]
-    \input{../python/tables/estimation_results.tex}
-    \caption{\label{tab:python-summary}\emph{Python:} Estimation results of the
-        linear Logistic regression.}
-\end{table}
+This chapter utilizes Kernel Density Estimation (KDE), a non-parametric technique, to estimate the probability density function of betting odds. KDE is formally defined as:
 
+\begin{equation}
+\hat{f}(x) = \frac{1}{n\cdot h} \sum_{i=1}^{n} K\left(\frac{x - X_i}{h}\right)
+\end{equation}
 
+where \(K\) denotes the kernel, a non-negative function integrating to one with a mean of zero; \(h\) represents the bandwidth, controlling the smoothness of the estimate; \(n\) is the number of data points; \(X_i\) are the observed data points; and \(x\) is the point at which the density is being estimated. For the purposes of this analysis, a Gaussian kernel was selected, with the bandwidth \(h = 0.5\) and gridsize set to 1000.
+The accompanying Figure \ref{fig:kde_arbitrage_opportunities} illustrates the KDE of all betting odds, with the superimposed colored points marking the odds that present arbitrage opportunities across various matches of the Italian Series A.
 
+\begin{figure}[H]
 
-% section introduction (end)
+    \centering
+    \includegraphics[width=0.85\textwidth]{../bld/figures/kde_with_arbitrage_opportunities}
 
+    \caption{ Kernel Density Estimate of the distribution of all betting odds with superimposed points indicating the odds associated with arbitrage opportunities.}
+    \label{fig:kde_arbitrage_opportunities}
 
+\end{figure}
+
+\section{Comparative Yield Analysis}
+\label{sec:comparative_yield_analysis}
+
+This section compares the yield of arbitrage betting with the average daily yield of Bitcoin over the past year, a period during which Bitcoin has shown exceptionally high returns. The comparison is apt due to both domains exhibiting characteristics of high-risk and high-reward, akin to a financial 'wild west'.
+
+The yield from arbitrage opportunities is estimated using the compounded growth of an initial investment, considering the reinvestment of payouts.
+
+\begin{equation}
+    \text{New Investment} = \text{Current Investment} \cdot \left(1 + \frac{\text{Yield}}{100}\right)
+\end{equation}
+
+For Bitcoin, the average daily yield was extrapolated to gauge investment growth over the same period, with the following formula:
+
+\begin{equation}
+    \text{New Investment Value} = \text{Previous Investment Value} \cdot \left(1 + \text{Average Daily Yield}\right)
+\end{equation}
+
+The ensuing plot reflects the differences in the investment growth trajectory of arbitrage betting compared to the more modest, albeit erratic, path of Bitcoin's yield.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../bld/figures/investment_growth}
+    \caption{Comparative investment growth over a 15-day period for arbitrage opportunities and Bitcoin.}
+    \label{fig:investment_growth_comparison}
+\end{figure}
+
+The marked disparity in investment growth, illustrated in Figure \ref{fig:investment_growth_comparison}, is particularly evident in the initial match between SSC Napoli and Juventus FC. This may imply a latency in the bookmakers' odds adjustments in response to new information, such as last-minute player line-up changes. As additional details come to light, they may momentarily create an arbitrage window. To confirm this theory, a substantially larger dataset, covering more games and temporal instances, would be indispensable. The existing dataset does not provide a robust foundation for inferring the broader market behavior of the bookmakers.
 
 \setstretch{1}
 \printbibliography
 \setstretch{1.5}
 
 
-% \appendix
+\clearpage
+\appendix
 
-% The chngctr package is needed for the following lines.
-% \counterwithin{table}{section}
-% \counterwithin{figure}{section}
+\section*{Appendix}
+
+\setcounter{table}{0}
+\renewcommand{\thetable}{A\arabic{table}}
+
+\begin{table}[H]
+    \scalebox{0.65}{
+        \input{../bld/tables/arbitrage_opportunities.tex}
+    }
+    \caption{Estimation results of the stakes and profits calculated by the Python model.}
+    \label{tab:summary}
+\end{table}
 
 \end{document}
