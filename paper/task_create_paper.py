@@ -1,22 +1,24 @@
 import subprocess
 from arbitrage_analysis.config import PAPER_DIR, BLD_figures, BLD_tables
 
-def _compile_tex_document(tex_file_path):
+def compile_tex_document(tex_file_path):
     """
-    Compiles a LaTeX document into a PDF using pdflatex.
+    Compiles a LaTeX document into a PDF file using pdflatex.
 
-    Parameters:
-    - tex_file_path: str, the path to the .tex file to be compiled.
+    This function takes the path to a .tex file as input and uses the pdflatex command to compile
+    it into a PDF. It outputs a success message upon successful compilation or an error message
+    if the compilation fails. In case of a compilation error, a subprocess.CalledProcessError is
+    raised.
+
+    Args:
+        tex_file_path (str): The file path of the .tex LaTeX document to be compiled.
 
     Returns:
-    - None. However, it prints out a success message upon successful compilation
-      or an error message if the compilation fails.
+        None: Upon successful completion, prints a success message. If an error occurs during
+              compilation, an error message is printed and a subprocess.CalledProcessError is raised.
 
     Raises:
-    - subprocess.CalledProcessError: If pdflatex encounters an error during compilation.
-
-    Example usage:
-    >>> compile_tex_document("path/to/document.tex")
+        subprocess.CalledProcessError: Indicates an error occurred during the compilation process.
     """
     try:
         # Execute the pdflatex command
@@ -39,4 +41,4 @@ def task_compile_paper(
     depends_on = depends_on_compile_tex,
     produces =  PAPER_DIR / "arbitrage_analysis.pdf"
     ):
-    _compile_tex_document(produces)
+    compile_tex_document(produces)

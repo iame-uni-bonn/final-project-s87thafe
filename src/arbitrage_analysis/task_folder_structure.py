@@ -4,8 +4,6 @@ from arbitrage_analysis.config import BLD
 files_produces = {
     "data": BLD / "data" / ".dir_created",
     "figures": BLD / "figures" / ".dir_created",
-    "models": BLD / "models" / ".dir_created",
-    "predictions": BLD / "predictions" / ".dir_created",
     "tables": BLD / "tables" / ".dir_created",
 }
 
@@ -16,8 +14,6 @@ def task_create_directories(
     directories = {
     "data": BLD / "data",
     "figures": BLD / "figures",
-    "models": BLD / "models",
-    "predictions": BLD / "predictions",
     "tables": BLD / "tables",
     }
     for directory in directories.values():

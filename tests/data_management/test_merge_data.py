@@ -3,6 +3,7 @@ from arbitrage_analysis.config import BLD_data
 from arbitrage_analysis.data_management.task_merge_data import standardize_team_names_and_merge
 
 def test_standardize_team_names_and_merge(tmp_path):
+    """Checks if team names are standardized and DataFrames are merged correctly with all rows and necessary columns preserved."""
     # Create mock DataFrames
     df_the_odds_api = pd.DataFrame({
         'bookmaker': ['888sport', 'Pinnacle'],

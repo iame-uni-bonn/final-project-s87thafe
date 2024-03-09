@@ -23,6 +23,7 @@ def setup_data(tmpdir_factory):
     return file
 
 def test_identify_arbitrage_opportunities(setup_data):
+    """Tests arbitrage opportunity identification for sample betting odds data."""
     output_path = setup_data.dirname + '/arbitrage_opportunities.pkl'
     identify_arbitrage_opportunities(setup_data, 100, output_path)
     result_df = pd.read_pickle(output_path)

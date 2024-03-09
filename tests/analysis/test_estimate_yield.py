@@ -24,19 +24,20 @@ def mock_data():
     return df
 
 def test_calculate_and_filter_highest_yield_basic(mock_data):
+    """Ensures that the highest yield filtering correctly processes mock arbitrage data."""
     with tempfile.TemporaryDirectory() as tempdir:
         # Save mock data to a pickle file
         temp_path = Path(tempdir) / "mock_arbitrage_opportunity.pkl"
         mock_data.to_pickle(temp_path)
 
-        # Call your function with the mock data path
+        # Call function with the mock data path
         filtered_arbitrage_path = Path(tempdir) / "filtered_arbitrage_opportunities.pkl"
-        calculate_and_filter_highest_yield(temp_path, 100, filtered_arbitrage_path)
+        calculate_and_filter_highest_yield(temp_path,filtered_arbitrage_path, 100)
         
         # Load the result
         result_df = pd.read_pickle(filtered_arbitrage_path)
         
-        # Assertions to verify your function's behavior
+        # Assert
         assert not result_df.empty, "The result should not be empty"
         assert 'yield' in result_df.columns, "Result DataFrame must contain 'yield' column"
         assert 'investment_growth' in result_df.columns, "Result DataFrame must contain 'investment_growth' column"

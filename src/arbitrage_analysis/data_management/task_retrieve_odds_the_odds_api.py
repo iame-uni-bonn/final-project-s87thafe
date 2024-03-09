@@ -4,16 +4,18 @@ from arbitrage_analysis.config import BLD_data, SRC
 
 def extract_odds_the_odds_api(bookmakers_json, home_team, away_team, commence_time):
     """
-    Extends functionality to include the commencement time of the game.
-    
-    Parameters:
-    - bookmakers_json (str): A JSON string containing the bookmakers' odds data.
-    - home_team (str): The name of the home team.
-    - away_team (str): The name of the away team.
-    - commence_time (str): The start time of the game.
-    
+    Parses bookmakers' odds data from JSON and creates a DataFrame including odds for home win, draw, and away win,
+    along with the game's commence time.
+
+    Args:
+        bookmakers_json (str): JSON string containing odds data from bookmakers.
+        home_team (str): Name of the home team.
+        away_team (str): Name of the away team.
+        commence_time (str): Start time of the game.
+
     Returns:
-    - pandas.DataFrame: A DataFrame including odds from different bookmakers and the commence time.
+        pandas.DataFrame: DataFrame containing odds from different bookmakers for the specified game, including
+                          home win odds, draw odds, away win odds, and the commence time.
     """
     bookmakers_data = json.loads(bookmakers_json.replace("'", "\""))
     bookmakers_odds = []

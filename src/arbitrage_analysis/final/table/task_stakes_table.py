@@ -1,28 +1,38 @@
 import pandas as pd
-from arbitrage_analysis.config import BLD, BLD_data, BLD_tables
+from arbitrage_analysis.config import BLD_data, BLD_tables
 
 def _format_column_name(col_name):
     """
-    Formats a column name by replacing underscores with spaces and capitalizing the first letter of each word.
-    
-    Parameters:
-    - col_name (str): The original column name.
-    
+    Formats a given column name by making stylistic adjustments.
+
+    This function takes a column name string, replaces underscores with spaces, and capitalizes the first letter of each word. The transformation makes column names more readable, especially when presenting data in user-friendly formats (e.g., reports, tables).
+
+    Args:
+        col_name (str): The original column name to be formatted.
+
     Returns:
-    - str: The formatted column name.
+        str: The formatted column name with spaces instead of underscores and each word capitalized.
+
+    Example:
+        Input: "best_odds_home"
+        Output: "Best Odds Home"
     """
     return ' '.join(word.capitalize() for word in col_name.split('_'))
 
-def _display_stakes_in_latex(file_path, output_path):
+def display_stakes_in_latex(file_path, output_path):
     """
-    Reads a DataFrame from a .pkl file, selects specific columns, renames them, and converts it to a LaTeX table.
-    
-    Parameters:
-    - file_path (str): Path to the .pkl file containing the DataFrame.
-    - output_path (str): Path where the LaTeX table will be saved.
-    
+    Reads a DataFrame from a pickle file, selects and renames specific columns, then exports it as a LaTeX table.
+
+    This function processes a DataFrame containing arbitrage stakes information by selecting relevant columns,
+    formatting their names for readability, and finally converting the data into a LaTeX table format. The resultant
+    table is saved to a specified file path.
+
+    Args:
+        file_path (str): Path to the pickle (.pkl) file containing the DataFrame with arbitrage opportunities.
+        output_path (str): Destination path for the generated LaTeX table file.
+
     Returns:
-    - None
+        None: The LaTeX table is written to `output_path`, with no value returned.
     """
     # Load the DataFrame from .pkl file
     df = pd.read_pickle(file_path)
@@ -48,4 +58,4 @@ def task_display_stakes_in_latex(
     depends_on = BLD_data / "arbitrage_opportunities.pkl",
     produces = BLD_tables / "arbitrage_opportunities.tex"
 ):
-    _display_stakes_in_latex(depends_on, produces)
+    display_stakes_in_latex(depends_on, produces)

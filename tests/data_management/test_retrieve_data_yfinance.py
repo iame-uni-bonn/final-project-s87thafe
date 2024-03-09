@@ -13,10 +13,11 @@ def mock_yfinance_data():
     return data
 
 def test_calculate_average_returns(mock_yfinance_data):
+    """Verifies that average returns are correctly calculated and saved, utilizing mocked yfinance data and pandas DataFrame saving."""
     with patch('arbitrage_analysis.data_management.task_retrieve_data_yfinance.yf.download', return_value=mock_yfinance_data) as mock_download, \
          patch('pandas.DataFrame.to_pickle') as mock_to_pickle:
 
-        # Call the function with a sample ticker and a path
+        # Call function with a sample ticker and a path
         calculate_average_returns('AAPL', 'dummy/path.pkl')
 
         # Ensure yfinance.download was called correctly

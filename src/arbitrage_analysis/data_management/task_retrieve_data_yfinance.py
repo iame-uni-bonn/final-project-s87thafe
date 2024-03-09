@@ -4,6 +4,20 @@ import pandas as pd
 from arbitrage_analysis.config import BLD_data
 
 def calculate_average_returns(ticker, yield_average_path):
+    """
+    Fetches historical closing prices for a given ticker symbol over the last year from Yahoo Finance,
+    calculates daily returns, and then computes the average return for each day across all 15-day intervals
+    within the year. The averages are saved to a specified path.
+
+    Args:
+        ticker (str): The ticker symbol for the stock or asset to fetch historical data for.
+        yield_average_path (Path): The path where the DataFrame containing the average daily changes
+                                          will be saved as a pickle file.
+
+    Returns:
+        None: This function does not have a return value. It saves the calculated averages to a file specified by
+              `yield_average_path`.
+    """
     # Fetch data for the given ticker over the last year
     data = yf.download(ticker, period="1y")
 

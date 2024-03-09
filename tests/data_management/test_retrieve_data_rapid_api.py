@@ -1,11 +1,20 @@
 import pandas as pd
 import pytest
-from arbitrage_analysis.data_management.task_retrieve_odds_rapid_api import extract_odds_rapid_api  # Adjust the import based on your script's actual name
+from arbitrage_analysis.data_management.task_retrieve_odds_rapid_api import extract_odds_rapid_api
 
-def mock_read_csv(file_path):
+def _mock_read_csv(file_path):
+    """
+    Simulates reading a CSV file and returns a DataFrame with mock odds data for testing purposes.
+
+    Args:
+        file_path (str): The file path for the CSV file to be read. This parameter is ignored in this mock function.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing simulated odds data for multiple matches.
+    """
     # Simulate a DataFrame with mock data for multiple matches
     data = {}
-    for i in range(5):  # Simulating data for 5 matches as an example
+    for i in range(5):
         data.update({
             f'{i}.away_team': [f'Team A{i}'],
             f'{i}.home_team': [f'Team B{i}'],
@@ -19,9 +28,10 @@ def mock_read_csv(file_path):
 @pytest.fixture
 def mock_df(monkeypatch):
     # Use monkeypatch to replace pd.read_csv with mock_read_csv for testing
-    monkeypatch.setattr(pd, "read_csv", mock_read_csv)
+    monkeypatch.setattr(pd, "read_csv", _mock_read_csv)
 
 def test_extract_odds_with_mock(mock_df):
+    """Verifies that the extraction of odds from a mocked CSV via Rapid API produces a DataFrame with the expected structure and no NaN values."""
     # Call the function with a dummy path, as pd.read_csv is mocked
     result_df = extract_odds_rapid_api("dummy_path.csv")
     

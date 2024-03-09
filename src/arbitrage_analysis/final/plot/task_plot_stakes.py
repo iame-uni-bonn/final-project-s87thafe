@@ -1,21 +1,29 @@
 import plotly.graph_objects as go
 import pandas as pd
-from arbitrage_analysis.config import BLD, BLD_data, BLD_figures
+from arbitrage_analysis.config import BLD_data, BLD_figures
 
 def plot_arbitrage_opportunities(data_path, fig_path):
     """
-    Generates a plot of arbitrage opportunities, showing stakes and potential payout per game,
-    along with a line representing total investment.
-    
-    Parameters:
-    - data_path: Path object pointing to the pickle file with arbitrage opportunities.
-    - fig_path: Path object where the generated figure will be saved.
+    Generates and saves a plot of arbitrage opportunities, showcasing stakes and potential payouts per game.
+
+    This function visualizes the stakes placed on different outcomes (home win, draw, away win) and the
+    potential payout for each game. It also includes a line indicating the total investment across all games.
+    The resulting plot is saved to a specified location.
+
+    Args:
+        data_path (Path): Path to a pickle file containing arbitrage opportunities. This file
+            should contain a DataFrame with columns specifying stakes and potential payouts.
+        fig_path (Path): Path where the generated plot figure will be saved.
+
+    Returns:
+        None: The plot is directly saved to the location specified by `fig_path`.
+
     """
     arb_opportunities = pd.read_pickle(data_path)
     fig = go.Figure()
     bar_width = 0.2
-    offset = 0.2  # Adjust for spacing between bars
-    total_investment = 100  # Define total investment
+    offset = 0.2
+    total_investment = 100
 
     for i, row in enumerate(arb_opportunities.itertuples(index=False)):
         match_index = i

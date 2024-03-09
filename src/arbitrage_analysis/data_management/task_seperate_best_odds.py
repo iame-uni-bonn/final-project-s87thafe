@@ -3,15 +3,13 @@ from arbitrage_analysis.config import SRC, BLD_data, BLD_figures
 
 def find_best_odds(df_path) -> pd.DataFrame:
     """
-    Identifies the best odds for home wins, draws, and away wins for each match,
-    along with the corresponding bookmakers, from a dataset of betting odds.
+    Loads betting odds data and identifies the best odds for home wins, draws, and away wins for each match, along with the corresponding bookmakers.
 
-    Parameters:
-    - df_path (Path): The path to the pickle file containing the merged odds data.
+    Args:
+        df_path (Path): The path to the pickle file containing the dataset with merged odds from various bookmakers.
 
     Returns:
-    - pd.DataFrame: A DataFrame containing the best odds and corresponding bookmakers
-      for each outcome (home win, draw, away win) across all matches.
+        pd.DataFrame: A DataFrame with columns for home team, away team, commence time, best odds for home win, draw, and away win, and the bookmakers offering these odds.
     """
     # Load the merged odds data
     df = pd.read_pickle(df_path)

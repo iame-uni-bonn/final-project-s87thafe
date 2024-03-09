@@ -1,7 +1,8 @@
 import pandas as pd
-from arbitrage_analysis.analysis.task_calculate_arbitrage import calculate_stakes
+from arbitrage_analysis.analysis.task_calculate_arbitrage import _calculate_stakes
 
 def test_calculate_stakes():
+    """Validates that stakes are correctly calculated for a given arbitrage opportunity."""
     # Creating a sample row with arbitrage opportunity
     sample_row = pd.Series({
         'best_odds_home': 2.0,
@@ -18,7 +19,7 @@ def test_calculate_stakes():
     expected_stake_away = (1 / 6.0 / 0.9) * total_investment
 
     # Calling the calculate_stakes function
-    calculated_row = calculate_stakes(sample_row, total_investment)
+    calculated_row = _calculate_stakes(sample_row, total_investment)
 
     # Assert
     assert calculated_row['stake_home'] == expected_stake_home, f"Expected stake_home to be {expected_stake_home}, got {calculated_row['stake_home']}"

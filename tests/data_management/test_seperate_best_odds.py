@@ -3,7 +3,7 @@ import pytest
 from arbitrage_analysis.data_management.task_seperate_best_odds import find_best_odds
 
 @pytest.fixture
-def sample_data():
+def sample_data(tmp_path):
     data = {
         "bookmaker": ["888sport", "Pinnacle", "1xBet", "Suprabets", "MyBookie.ag"],
         "home_team": ["AC Milan"] * 5,
@@ -14,20 +14,20 @@ def sample_data():
         "away_win_odds": [7.50, 6.78, 7.55, 7.40, 6.75]
     }
     df = pd.DataFrame(data)
-    test_path = "test_odds.pkl"
+    test_path = tmp_path / "test_odds.pkl"
     df.to_pickle(test_path)
     return test_path
 
 def test_find_best_odds(sample_data):
+    """Asserts that the function correctly identifies and separates the best odds and corresponding bookmakers for each match outcome."""
     result_df = find_best_odds(sample_data)
-    # Assuming your function is correctly implemented, the expected outcome would be:
     expected_data = {
         "home_team": ["AC Milan"],
         "away_team": ["Empoli"],
         "commence_time": ["2024-03-10T14:00:00Z"],
-        "best_odds_home": [1.47],  # Best home win odds from 1xBet
-        "best_odds_draw": [5.10],  # Best draw odds from Suprabets
-        "best_odds_away": [7.55],  # Best away win odds from 1xBet
+        "best_odds_home": [1.47],
+        "best_odds_draw": [5.10],
+        "best_odds_away": [7.55],
         "bookie_home": ["1xBet"],
         "bookie_draw": ["Suprabets"],
         "bookie_away": ["1xBet"]

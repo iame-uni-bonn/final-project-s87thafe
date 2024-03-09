@@ -12,17 +12,16 @@ rapid_api_key = os.getenv('RAPIDAPI_API_KEY')
 
 def get_matches_rapid_api(sport, country, competition, api_key):
     """
-    Fetches matches for a specific sport, country, and competition from the RapidAPI.
-    
-    Parameters:
-        sport (str): The sport to fetch matches for.
-        country (str): The country to fetch matches for.
-        competition (str): The competition to fetch matches for.
-        match_urls (bool, optional): Whether to include match URLs in the response. Defaults to False.
-        
+    Fetches matches for a specified sport, country, and competition from RapidAPI.
+
+    Args:
+        sport (str): Sport to fetch matches for.
+        country (str): Country to fetch matches for.
+        competition (str): Competition to fetch matches for.
+        api_key (str): API key for RapidAPI.
+
     Returns:
-        dict: A JSON response containing the matches if the request is successful.
-        str: An error message indicating the HTTP status code if the request fails.
+        JSON or str: JSON response containing the matches if successful, else an error message.
     """
     url = "https://odds-api1.p.rapidapi.com/matches"
     querystring = {
@@ -43,16 +42,13 @@ def get_matches_rapid_api(sport, country, competition, api_key):
 
 def extract_matchid_bookie_pairs(csv_path):
     """
-    Extracts match IDs and their corresponding bookmakers from a CSV file, creating a list of dictionaries
-    with each dictionary containing a 'match_id' and its 'bookies'.
+    Extracts match IDs and corresponding bookmakers from a CSV file.
 
-    Parameters:
-        csv_path (str): The path to the CSV file containing match and bookmaker data.
+    Args:
+        csv_path (str): Path to the CSV file.
 
     Returns:
-        list: A list of dictionaries, where each dictionary includes:
-            - 'match_id' (str): The match ID.
-            - 'bookies' (str): The comma-separated string of bookmakers for that match.
+        list: List of dictionaries with 'match_id' and 'bookies'.
     """
     # Load the CSV file
     df_matches = pd.read_csv(csv_path)
@@ -76,14 +72,14 @@ def extract_matchid_bookie_pairs(csv_path):
 
 def get_odds_for_matchid_bookie_pairs(matchid_bookie_pairs, api_key):
     """
-    Fetches odds for each match ID and its corresponding bookmakers using RapidAPI.
+    Fetches odds for each match ID and corresponding bookmakers using RapidAPI.
 
-    Parameters:
-        matchid_bookie_pairs (list of dicts): List of dictionaries, each containing a match ID and its bookies.
-        api_key (str): API key for authenticating requests to RapidAPI.
+    Args:
+        matchid_bookie_pairs (list of dicts): List containing match IDs and bookmakers.
+        api_key (str): API key for RapidAPI.
 
     Returns:
-        pandas.DataFrame: A DataFrame containing odds for the specified matches and bookmakers.
+        pd.DataFrame: DataFrame containing odds data.
     """
     all_odds = []  # List to store odds data for all matches
     
@@ -114,21 +110,23 @@ def get_odds_for_matchid_bookie_pairs(matchid_bookie_pairs, api_key):
      
     return df_odds
 
-# Serie A matches
-sport = "soccer"
-country = "italy"
-competition = "serie-a"
+# As the retrival depends on API keys and the data changes frequently, this code should not run via pytask.
+if __name__ == "__main__":
+    # Serie A matches
+    sport = "soccer"
+    country = "italy"
+    competition = "serie-a"
 
-# Fetch matches data
-matches_data = get_matches_rapid_api(sport, country, competition, rapid_api_key)
-df_matches = pd.json_normalize(matches_data)
-df_matches.to_csv(SRC / "data" / "df_matches_rapid_api.csv", index=False)
+    # Fetch matches data
+    matches_data = get_matches_rapid_api(sport, country, competition, rapid_api_key)
+    df_matches = pd.json_normalize(matches_data)
+    df_matches.to_csv(SRC / "data" / "df_matches_rapid_api.csv", index=False)
 
-# Define the path to the CSV file
-csv_path = SRC / "data" / "df_matches_rapid_api.csv"
-# Extract matchids and bookies
-matchid_bookie_pairs = extract_matchid_bookie_pairs(csv_path)
+    # Define the path to the CSV file
+    csv_path = SRC / "data" / "df_matches_rapid_api.csv"
+    # Extract matchids and bookies
+    matchid_bookie_pairs = extract_matchid_bookie_pairs(csv_path)
 
-#Fetch odds data
-df_odds = get_odds_for_matchid_bookie_pairs(matchid_bookie_pairs, rapid_api_key)
-df_odds.to_csv(SRC / "data" / "df_odds_rapid_api.csv", index=False)
+    # Fetch odds data
+    df_odds = get_odds_for_matchid_bookie_pairs(matchid_bookie_pairs, rapid_api_key)
+    df_odds.to_csv(SRC / "data" / "df_odds_rapid_api.csv", index=False)

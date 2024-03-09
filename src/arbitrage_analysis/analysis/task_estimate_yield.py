@@ -1,18 +1,18 @@
 import pandas as pd
 from arbitrage_analysis.config import BLD_data, SRC
 
-def calculate_and_filter_highest_yield(arbitrage_opportunity_path, initial_investment=100, filtered_arbitrage_path = BLD_data / "filtered_arbitrage_opportunities.pkl"):
+def calculate_and_filter_highest_yield(arbitrage_opportunity_path, filtered_arbitrage_path, initial_investment=100):
     """
-    Calculates the yield for betting opportunities and filters out those with the highest yield per commence time.
-    Additionally, calculates and appends the investment growth over time assuming reinvestment of payouts.
+    Calculates the yield from arbitrage opportunities and filters them to identify the highest yield for each unique commence time.
+    It simulates reinvestment of payouts to calculate how the initial investment would grow over time based on the yields.
 
-    Parameters:
-    betting_data_path (Path or str): The path to the pickled DataFrame containing betting opportunities.
-    initial_investment (float): The initial amount to be invested.
+    Args:
+        arbitrage_opportunity_path (Path): Path to the pickle file containing the DataFrame of arbitrage opportunities.
+        filtered_arbitrage_path (Path): Path where the filtered DataFrame will be saved as a pickle file.
+        initial_investment (float, optional): The amount of money to start investing with. Defaults to 100.
 
     Returns:
-    DataFrame: A DataFrame containing filtered betting opportunities with the highest yield per commence time,
-                including the reinvestment growth calculation.
+        None: This function does not return a value. Instead, it saves the filtered DataFrame with the highest yield opportunities and their investment growth to a pickle file.
     """
     # Load the dataset
     df = pd.read_pickle(arbitrage_opportunity_path)
@@ -24,11 +24,7 @@ def calculate_and_filter_highest_yield(arbitrage_opportunity_path, initial_inves
     df['profit'] = df['total_payout'] - df['total_staked']
     df['yield'] = (df['profit'] / df['total_staked']) * 100
 
-    # Filter out the entry with the highest yield for each commence time
-    def filter_highest_yield(group):
-        return group.loc[group['yield'].idxmax()]
-
-    df_filtered = df.groupby('commence_time', group_keys=False).apply(filter_highest_yield).reset_index(drop=True)
+    df_filtered = df.groupby('commence_time', group_keys=False).apply(_filter_highest_yield).reset_index(drop=True)
     
     # Initialize investment
     current_investment = initial_investment
@@ -42,16 +38,32 @@ def calculate_and_filter_highest_yield(arbitrage_opportunity_path, initial_inves
     df_filtered.to_pickle(filtered_arbitrage_path)
 
 
-def ticker_growth_path(ticker_yield_path, initial_investment, benchmark_growth_path):
+def _filter_highest_yield(group):
     """
-    Calculate the growth path of an initial investment based on average daily changes.
+    Helper function to identify the opportunity with the highest yield within a group of arbitrage opportunities.
 
-    Parameters:
-    - initial_investment (float): The amount of the initial investment.
-    - ticker_yield_path (str): Path to the pickled DataFrame containing the average daily changes.
-
+    Args:
+        group (DataFrame): A subset of the arbitrage opportunities DataFrame, grouped by 'commence_time'.
+    
     Returns:
-    - pandas.DataFrame: A DataFrame showing the investment value across the 15-day intervals.
+        DataFrame: A single-row DataFrame corresponding to the opportunity with the highest yield in the group.
+    """
+    return group.loc[group['yield'].idxmax()]
+
+def ticker_growth_path(ticker_yield_path, benchmark_growth_path, initial_investment=100):
+    """
+    Simulates the growth of an initial investment over time, based on the average daily yield changes recorded for a specific ticker.
+
+    Args:
+        ticker_yield_path (Path): Path to the pickle file containing a DataFrame with the average daily yield changes of a ticker.
+        benchmark_growth_path (Path): Path where the resulting DataFrame showing the investment growth over time will be saved as a pickle file.
+        initial_investment (float, optional): The amount of money to start investing with. Defaults to 100.
+    
+    Returns:
+        None: This function does not return a value. Instead, it saves a DataFrame representing the investment growth over time to a pickle file.
+    
+    Note:
+        The function assumes the DataFrame contains a column 'Average Daily Change' representing the daily yield changes.
     """
     # Load the dataset
     averages_df = pd.read_pickle(ticker_yield_path)
@@ -59,7 +71,6 @@ def ticker_growth_path(ticker_yield_path, initial_investment, benchmark_growth_p
     # Initialize the growth path with the initial investment value
     growth_path = [initial_investment]
 
-    # Adjust the first entry calculation if needed here
     # Start calculation from the first day
     for change in averages_df['Average Daily Change']:
         new_value = growth_path[-1] * (change)
@@ -88,5 +99,5 @@ def task_estimate_yield(
     depends_on = depends_on_estimate_yield,
     produces = produces_estimate_yield
 ):
-    calculate_and_filter_highest_yield(depends_on["arbitrage_opportunity"], initial_investment=100, filtered_arbitrage_path=produces["filtered_arbitrage_opportunity"])
-    ticker_growth_path(depends_on["ticker_yield_averages"], initial_investment=100, benchmark_growth_path=produces["average_growth_BTC"])
+    calculate_and_filter_highest_yield(depends_on["arbitrage_opportunity"], produces["filtered_arbitrage_opportunity"], initial_investment=100)
+    ticker_growth_path(depends_on["ticker_yield_averages"], produces["average_growth_BTC"], initial_investment=100)

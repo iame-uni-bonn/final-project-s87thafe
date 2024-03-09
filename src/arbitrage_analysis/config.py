@@ -6,8 +6,6 @@ BLD = SRC.joinpath("..", "..", "bld").resolve()
 
 BLD_data = BLD / "data"
 BLD_figures = BLD / "figures"
-BLD_model = BLD  / "models"
-BLD_predictions = BLD / "predictions"
 BLD_tables = BLD / "tables"
 
 TEST_DIR = SRC.joinpath("..", "..", "tests").resolve()
@@ -18,8 +16,6 @@ __all__ = [
     "SRC",
     "BLD_data",
     "BLD_figures",
-    "BLD_models",
-    "BLD_predictions",
     "BLD_tables",
     "TEST_DIR",
     "GROUPS",

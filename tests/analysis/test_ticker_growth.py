@@ -14,6 +14,7 @@ def mock_yield_data():
     return df
 
 def test_ticker_growth_path(mock_yield_data):
+    """Verifies that the ticker growth path function accurately computes the growth of an investment based on mock daily yield changes."""
     with tempfile.TemporaryDirectory() as tempdir:
         # Save mock data to a pickle file
         yield_path = Path(tempdir) / "mock_yield_data.pkl"
@@ -26,16 +27,16 @@ def test_ticker_growth_path(mock_yield_data):
         initial_investment = 100
 
         # Call the function with the test paths
-        ticker_growth_path(yield_path, initial_investment, output_path)
+        ticker_growth_path(yield_path, output_path, initial_investment)
 
         # Load the result
         result_df = pd.read_pickle(output_path)
 
-        # Assertions to verify the function's behavior
+        # Assert
         assert not result_df.empty, "The result should not be empty"
         assert 'investment_growth_ticker' in result_df.columns, "Result DataFrame must contain 'investment_growth_ticker' column"
         
-        # Verify the growth calculations - simplified example
+        # Verify the growth calculations
         expected_growth = initial_investment
         for change in mock_yield_data['Average Daily Change']:
             expected_growth *= change

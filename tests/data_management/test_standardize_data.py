@@ -1,6 +1,10 @@
 import pandas as pd
 
 def test_standardize_team_names():
+    """
+    Tests the standardization of team names in a DataFrame against the mapping from standardize_team_names_and_merge(),
+    ensuring that both home and away team names are correctly standardized.
+    """
     # Create a simple DataFrame to test the standardization
     df_test = pd.DataFrame({'home_team': ['Ssc Napoli', 'Inter Milano'], 'away_team': ['Juventus Turin', 'Genoa Cfc']})
     # Define the mapping of team names

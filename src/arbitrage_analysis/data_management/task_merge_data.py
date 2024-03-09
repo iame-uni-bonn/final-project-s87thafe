@@ -3,16 +3,17 @@ from arbitrage_analysis.config import SRC, BLD_data
 
 def standardize_team_names_and_merge(df_the_odds_api_path, df_rapid_api_path, output_path):
     """
-    Standardizes team names in two DataFrames and merges them into a single DataFrame.
+    Reads, standardizes team names, and merges two DataFrames containing odds data from different APIs. 
+    The standardized and merged data is then saved to a specified path.
 
-    Parameters:
-    - df_the_odds_api_path (Path): Path to the "The Odds API" DataFrame pickle file.
-    - df_rapid_api_path (Path): Path to the "Rapid API" DataFrame pickle file.
-    - output_path (Path): Path where the merged DataFrame will be saved as a .pkl.
+    Args:
+        df_the_odds_api_path (Path): Path to the pickle file with odds data from The Odds API.
+        df_rapid_api_path (Path): Path to the pickle file with odds data from Rapid API.
+        output_path (Path): Path where the merged and standardized DataFrame is saved as a pickle file.
 
-    The function reads two DataFrames from pickle files, standardizes team names using
-    a predefined mapping, renames columns for consistency, merges them, and saves
-    the result as a Pickle file.
+    Returns:
+        None: This function does not have a return value. It saves the calculated averages to a file specified by
+         `output_path`.
     """
     # Load the DataFrames
     df_the_odds_api = pd.read_pickle(df_the_odds_api_path)

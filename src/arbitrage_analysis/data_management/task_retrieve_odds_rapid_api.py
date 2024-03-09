@@ -3,16 +3,15 @@ from arbitrage_analysis.config import SRC, BLD_data
 
 def extract_odds_rapid_api(src_file):
     """
-    Transforms a CSV file containing odds data from the Rapid API format into a cleaned DataFrame.
-    
-    The function iterates through the CSV, extracting and renaming specified columns for each match, 
-    then concatenates these into a final DataFrame which is cleaned of NaN values.
-    
-    Parameters:
-    - src_file (Path): The path to the source CSV file.
-    
+    Reads and cleans odds data from a specified CSV file. This involves extracting key columns,
+    renaming them for consistency, and removing any rows with missing values.
+
+    Args:
+        src_file (Path): Path to the source CSV file containing odds data.
+
     Returns:
-    - pandas.DataFrame: A DataFrame containing the cleaned and transformed odds data.
+        pandas.DataFrame: Cleaned DataFrame with odds data structured with columns
+                          ['away_team', 'home_team', 'away', 'home', 'draw', 'bookie'].
     """
     # Read the source CSV file
     df = pd.read_csv(src_file)
@@ -21,7 +20,7 @@ def extract_odds_rapid_api(src_file):
     final_df = pd.DataFrame(columns=['away_team', 'home_team', 'away', 'home', 'draw', 'bookie'])
 
     # Loop through each match's data, extracting and transforming relevant columns
-    for i in range(167):  # Adjust based on the actual number of matches
+    for i in range(167):
         # Define the column names to extract for this match
         columns_to_extract = [
             f'{i}.away_team', f'{i}.home_team', f'{i}.away', f'{i}.home', f'{i}.draw', f'{i}.bookie'
@@ -33,7 +32,7 @@ def extract_odds_rapid_api(src_file):
             extracted_df.columns = ['away_team', 'home_team', 'away', 'home', 'draw', 'bookie']
             final_df = pd.concat([final_df, extracted_df], ignore_index=True)
         else:
-            break  # Exit loop if no more matches are found
+            break
 
     # Drop any rows containing NaN values to clean the dataset
     final_df.dropna(inplace=True)

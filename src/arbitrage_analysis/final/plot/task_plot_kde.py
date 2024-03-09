@@ -5,19 +5,21 @@ from plotly.colors import qualitative
 
 def plot_kernel_density_estimate(all_odds_x, all_odds_y, df_arb_opp, produces):
     """
-    Load arbitrage opportunities and all odds, calculate the kernel density estimation (KDE) for all odds,
-    and plot the KDE along with arbitrage opportunities using Plotly.
+    Plots the kernel density estimation (KDE) for betting odds and highlights arbitrage opportunities.
 
-    Parameters:
-    - odds_file_path (str): Path to the pickle file containing all odds.
-    - arbitrage_file_path (str): Path to the pickle file containing arbitrage opportunities.
-    - bandwidth (float): The bandwidth for the KDE calculation. Defaults to 1.
-    - gridsize (int): The number of points to generate for the KDE plot. Defaults to 1000.
+    This function generates a Plotly figure illustrating the distribution of betting odds with a KDE curve.
+    It also marks certain odds indicating arbitrage opportunities using different colors.
+
+    Args:
+        all_odds_x (Iterable[float]): Odds values for KDE calculation, representing different betting odds.
+        all_odds_y (Iterable[float]): Computed density values for the KDE plot, corresponding to `all_odds_x`.
+        df_arb_opp (pandas.DataFrame): Information on arbitrage opportunities. Required columns: 'home_team', 'away_team',
+            'best_odds_home', 'best_odds_draw', 'best_odds_away'.
+        produces (str): File path or name for saving the generated plot image.
 
     Returns:
-    - Plotly figure object displaying the KDE of all odds combined with arbitrage opportunities highlighted.
+        None: A Plotly figure is created and saved as an image at the specified `produces` path.
     """
-
     # Initialize Plotly figure
     fig = go.Figure(layout=go.Layout(
         title='Kernel Density Estimation of all Odds and Odds with Arbitrage Opportunities',
@@ -48,8 +50,8 @@ def plot_kernel_density_estimate(all_odds_x, all_odds_y, df_arb_opp, produces):
                                  mode='markers',
                                  marker=dict(color=color, size=8),
                                  name=game_label,
-                                 legendgroup=game_label,  # Group by game for a single legend entry
-                                 showlegend=True))  # Show legend only for the first occurrence
+                                 legendgroup=game_label,
+                                 showlegend=True))
 
     fig.write_image(produces, width=1000, height=800, scale=2)
 

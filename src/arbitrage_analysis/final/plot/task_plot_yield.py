@@ -6,16 +6,17 @@ from arbitrage_analysis.config import BLD_data, BLD_figures
 
 def plot_investment_growth(filtered_arbitrage_opp_path, investment_growth_path, btc_ticker_path):
     """
-    Generates a plot of investment growth based on filtered arbitrage betting opportunities.
+    Generates and saves a plot of investment growth over time based on filtered arbitrage opportunities and Bitcoin (BTC) yield averages.
 
-    Parameters:
-    - filtered_arbitrage_opp_path (Path or str): Path to the pickle file with the filtered arbitrage opportunities data.
-    - investment_growth_path (Path or str): File path where the generated plot image will be saved.
+    This function reads filtered arbitrage opportunities data and BTC yield averages from specified paths, then generates a time series plot. The x-axis represents dates of each bet, and the y-axis shows the cumulative value of the investment over time. Betting events are indicated with colored dots, and BTC yield averages are plotted for comparison.
 
-    The function creates a time series plot where the x-axis represents the date and time of each bet, 
-    and the y-axis shows the cumulative value of the investment. Each betting event is marked by a colored dot.
+    Args:
+        filtered_arbitrage_opp_path (Path or str): Path to the pickle file with filtered arbitrage opportunities data.
+        investment_growth_path (Path or str): File path where the generated plot image will be saved.
+        btc_ticker_path (Path or str): Path to the pickle file with Bitcoin yield averages data.
 
-    The plot is saved as an image to the specified path.
+    Returns:
+        None: The plot is directly saved to the location specified by `investment_growth_path`.
     """
     # Load the filtered dataset
     df_filtered = pd.read_pickle(filtered_arbitrage_opp_path)
