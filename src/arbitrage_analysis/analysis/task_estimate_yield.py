@@ -90,27 +90,3 @@ def task_estimate_yield(
 ):
     calculate_and_filter_highest_yield(depends_on["arbitrage_opportunity"], initial_investment=100, filtered_arbitrage_path=produces["filtered_arbitrage_opportunity"])
     ticker_growth_path(depends_on["ticker_yield_averages"], initial_investment=100, benchmark_growth_path=produces["average_growth_BTC"])
-
-
-# df_filtered = calculate_and_filter_highest_yield(depends_on_estimate_yield["arbitrage_opportunity_path"], initial_investment=100)
-df_ticker_benchmark = ticker_growth_path(BLD_data / "yield_averages_BTC.pkl", initial_investment=100, benchmark_growth_path=BLD_data / "benchmark_growth_path_BTC.pkl")
-
-averages_df = pd.read_pickle(BLD_data / "benchmark_growth_path_BTC.pkl")
-
-# # Convert commence_time to datetime and set as index for df_filtered
-# df_filtered['commence_time'] = pd.to_datetime(df_filtered['commence_time'])
-# df_filtered.set_index('commence_time', inplace=True)
-
-# # Generate a date range for the investment data frame that matches your main data frame
-# date_range = pd.date_range(start=df_filtered.index.min(), periods=len(df_ticker_benchmark), freq='D')
-
-# # Set this date range as the index of the investment growth data frame
-# df_ticker_benchmark.set_index(date_range, inplace=True)
-
-# # Merge or join the data frames based on the index (date)
-# merged_df = df_filtered.join(df_ticker_benchmark, how='outer')
-
-# # Fill NaN values as needed, for example, with forward fill if that makes sense for your analysis
-# merged_df['Investment Value'] = merged_df['Investment Value'].fillna(method='ffill')
-
-# print(merged_df)
