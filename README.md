@@ -1,42 +1,29 @@
 # Arbitrage Analysis in the Sports Betting Market
 
-
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/s87thafe/main.svg)](https://results.pre-commit.ci/latest/github/s87thafe/main)
-
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/EVOsE4mq)
-
-# Arbitrage Analysis in the Sports Betting Market
-
 ## Description
 
-This **final project** aims to calculate arbitrage opportunities in the sports betting market. The primary goal is to automatically gather data on the bookies' webpages and to identify and analyze instances where possible arbitrage bets can be placed.
+This project aims to explore arbitrage opportunities within the sports betting market by automating the analysis of bookmakers' odds. It seeks to identify profitable bets across various sports events, leveraging data management and statistical analysis techniques.
 
-## Key Features (Outlook):
+## Features
 
-**Data Collection**: Automated data collection and preparation to fetch odds from various sportsbooks.
-
-**Arbitrage Calculation**: Implement models to detect arbitrage oportunities: Identifying odds & odds toprobability conversion.
-
-**Analysis Tools**: Includes statistical tools to assess the risk free profitability:  Calculating arbitrage percentage & determining amounts.
+- **Automated Data Management**: Utilizes scripts to process and analyze betting odds data retrieved from The ODDs API and OddsAPI1 via RAPID API.
+- **Arbitrage Detection**: Employs algorithms to detect arbitrage opportunities by scrutinizing disparities in bookmakers' odds.
+- **Arbitrage Analysis**: Engages in arbitrage analysis, including the estimation of general densities for sports odds and the comparison with financial market data, specifically ticker data from Yahoo Finance.
 
 
-## Usage
+## Installation
 
-To get started, create and activate the environment with
+Ensure you have Conda or Mamba installed on your system. To set up the project environment:
 
 ```console
-$ conda/mamba env create --name arbitrage_analysis
+$ conda env create --file environment.yml --name arbitrage_analysis
 $ conda activate arbitrage_analysis
 ```
 
-To build the project, type
+## Building the Project
+
+Activate the project environment and execute the following command to build the project:
 
 ```console
 $ pytask
 ```
-
-## Credits
-
-This project was created with [cookiecutter](https://github.com/audreyr/cookiecutter)
-and the
-[econ-project-templates](https://github.com/OpenSourceEconomics/econ-project-templates).
