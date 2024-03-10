@@ -1,4 +1,5 @@
 import subprocess
+from pathlib import Path
 from arbitrage_analysis.config import PAPER_DIR, BLD_figures, BLD_tables
 
 def compile_tex_document(tex_file_path):
@@ -20,6 +21,7 @@ def compile_tex_document(tex_file_path):
     Raises:
         subprocess.CalledProcessError: Indicates an error occurred during the compilation process.
     """
+    Path(tex_file_path).touch()
     try:
         # Execute the pdflatex command
         subprocess.run(["pdflatex", tex_file_path], check=True)
@@ -34,11 +36,11 @@ depends_on_compile_tex = {
     "tex_figure": BLD_tables / "arbitrage_opportunities.tex",
     "kde_figure": BLD_figures / 'kde_with_arbitrage_opportunities.png',
     "arb_opp_figure": BLD_figures / "arbitrage_opportunities.png",
-    "yield_figure": BLD_figures / "investment_growth.png"
+    "yield_figure": BLD_figures / "investment_growth.png",
+    "tex_file": PAPER_DIR / "arbitrage_analysis.tex"
 }
 
 def task_compile_paper(
-    depends_on = depends_on_compile_tex,
-    produces =  PAPER_DIR / "arbitrage_analysis.pdf"
+    depends_on = depends_on_compile_tex
     ):
-    compile_tex_document(produces)
+    compile_tex_document(depends_on["tex_file"])
