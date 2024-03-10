@@ -13,4 +13,5 @@ depends_on_compile_tex = {
 def task_compile_paper(
     depends_on = depends_on_compile_tex
     ):
-    subprocess.run(["pdflatex", depends_on["tex_file"]], check=False, cwd=depends_on["tex_file"].parent)
+    # Compile the paper
+    subprocess.run(["latexmk", "-pdf", depends_on["tex_file"]], check=False, cwd=depends_on["tex_file"].parent)
