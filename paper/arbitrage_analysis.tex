@@ -117,19 +117,13 @@ Once an arbitrage opportunity is identified, the next step involves calculating 
 
 This formula ensures that the investment is proportionally distributed according to the odds and thus eliminates the risk involved.
 
-To reference the appendix containing the table of data in your subsection on "Outcome and Profit Calculation", you should first ensure that your appendix and the table within it have been properly labeled. Assuming your appendix is structured as previously discussed and your table has a label (e.g., \label{tab:python-summary}), you can reference it directly in your text.
-
-Here's how you could integrate a reference to your appendix within the "Outcome and Profit Calculation" subsection:
-
-latex
-
 \subsection{Outcome and Profit Calculation}
 Post allocation of stakes, the expected payout for each possible outcome is calculated to evaluate the profitability of identified arbitrage opportunities. By applying this methodology to our dataset, focused on Italian Serie A football matches, we uncover arbitrage opportunities within the scope of the analysed bookmakers. Detailed results of the stakes and profits for each identified arbitrage opportunity are presented in Appendix A, Table~\ref{tab:summary}.
 
 \begin{figure}[H]
 
     \centering
-    \includegraphics[width=0.85\textwidth]{../bld/figures/arbitrage_opportunities}
+    \includegraphics[width=1\textwidth]{../bld/figures/arbitrage_opportunities}
     \caption{Payouts by invested stakes, only for matches with an identified arbitrage opportunity.}
     \label{fig:python-predictions}
 
@@ -145,41 +139,38 @@ This chapter utilizes Kernel Density Estimation (KDE), a non-parametric techniqu
 \hat{f}(x) = \frac{1}{n\cdot h} \sum_{i=1}^{n} K\left(\frac{x - X_i}{h}\right)
 \end{equation}
 
-where \(K\) denotes the kernel, a non-negative function integrating to one with a mean of zero; \(h\) represents the bandwidth, controlling the smoothness of the estimate; \(n\) is the number of data points; \(X_i\) are the observed data points; and \(x\) is the point at which the density is being estimated. For the purposes of this analysis, a Gaussian kernel was selected, with the bandwidth \(h = 0.5\) and gridsize set to 1000.
+where \(K\) denotes the kernel, a non-negative function integrating to one with a mean of zero; \(h\) represents the bandwidth, controlling the smoothness of the estimate; \(n\) is the number of data points; \(X_i\) are the observed data points; and \(x\) is the point at which the density is being estimated. For the purposes of this analysis, a Gaussian kernel was selected, with the bandwidth \(h = 1\) and gridsize set to 1000.
 The accompanying Figure \ref{fig:kde_arbitrage_opportunities} illustrates the KDE of all betting odds, with the superimposed colored points marking the odds that present arbitrage opportunities across various matches of the Italian Series A.
 
 \begin{figure}[H]
 
     \centering
-    \includegraphics[width=0.85\textwidth]{../bld/figures/kde_with_arbitrage_opportunities}
+    \includegraphics[width=1\textwidth]{../bld/figures/kde_with_arbitrage_opportunities}
 
     \caption{ Kernel Density Estimate of the distribution of all betting odds with superimposed points indicating the odds associated with arbitrage opportunities.}
     \label{fig:kde_arbitrage_opportunities}
 
 \end{figure}
 
-\section{Comparative Yield Analysis}
+\section{Comparative Return Analysis}
 \label{sec:comparative_yield_analysis}
 
-This section compares the yield of arbitrage betting with the average daily yield of Bitcoin over the past year, a period during which Bitcoin has shown exceptionally high returns. The comparison is apt due to both domains exhibiting characteristics of high-risk and high-reward, akin to a financial 'wild west'.
+This section compares the return of arbitrage betting with the average daily return of Bitcoin over the past year, a period during which Bitcoin has shown exceptionally high returns. The comparison is apt due to both domains exhibiting characteristics of high-risk and high-reward, akin to a financial 'wild west'.
 
-The yield from arbitrage opportunities is estimated using the compounded growth of an initial investment, considering the reinvestment of payouts.
-
-\begin{equation}
-    \text{New Investment} = \text{Current Investment} \cdot \left(1 + \frac{\text{Yield}}{100}\right)
-\end{equation}
-
-For Bitcoin, the average daily yield was extrapolated to gauge investment growth over the same period, with the following formula:
+The estimation of yield from arbitrage opportunities leverages the concept of compounded investment growth, factoring in the reinvestment of returns. This methodological approach is encapsulated in the following formula:
 
 \begin{equation}
-    \text{New Investment Value} = \text{Previous Investment Value} \cdot \left(1 + \text{Average Daily Yield}\right)
+    \text{Investment Value}_{d} = \text{Investment Value}_{d-1} \cdot \text{Daily Return}_{d}
 \end{equation}
 
-The ensuing plot reflects the differences in the investment growth trajectory of arbitrage betting compared to the more modest, albeit erratic, path of Bitcoin's yield.
+Here, \(\text{Investment Value}_{d-1}\) denotes the previous day's investment value, while \(\text{Daily Return}_{d}\) represents the return factor for day \(d\), which is set to one on days without matches, and augmented by the arbitrage yield on match days.
+
+For Bitcoin, the approach anticipates future yields by drawing on historical data. Specifically, \(\text{Daily Return}_{d}\) equates to \(\text{Average Daily Return}_{d}\), calculated as the mean daily change over the last year, divided into 15-day segments. The starting point for each calculation interval is denoted as \(\text{Investment Value}_{0}\), ensuring a standardized basis for growth assessment across intervals.
+The ensuing plot reflects the differences in the investment growth trajectory of arbitrage betting compared to the more modest path of Bitcoin's yield.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{../bld/figures/investment_growth}
+    \includegraphics[width=1\textwidth]{../bld/figures/investment_growth}
     \caption{Comparative investment growth over a 15-day period for arbitrage opportunities and Bitcoin.}
     \label{fig:investment_growth_comparison}
 \end{figure}
